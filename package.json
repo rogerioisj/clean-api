@@ -20,7 +20,9 @@
   },
   "scripts": {
     "test": "jest",
-    "test:staged": "jest"
+    "test:staged": "jest",
+    "precommit": "lint-staged",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Rogerio Inacio",
