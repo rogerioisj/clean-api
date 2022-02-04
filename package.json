@@ -20,6 +20,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:staged": "jest",
     "precommit": "lint-staged",
     "prepare": "husky install"
