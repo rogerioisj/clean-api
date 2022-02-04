@@ -1,3 +1,4 @@
+import { MissingParamError } from '../errors/missing-param.error'
 import { HttpRequest, HttpResponse } from '../protocols/http.protocol'
 
 export class SignupController {
@@ -5,28 +6,28 @@ export class SignupController {
     if (!httpRequest.body.name) {
       return {
         statusCode: 400,
-        body: new Error('missing param: name')
+        body: new MissingParamError('name')
       }
     }
 
     if (!httpRequest.body.email) {
       return {
         statusCode: 400,
-        body: new Error('missing param: email')
+        body: new MissingParamError('email')
       }
     }
 
     if (!httpRequest.body.password) {
       return {
         statusCode: 400,
-        body: new Error('missing param: password')
+        body: new MissingParamError('password')
       }
     }
 
     if (!httpRequest.body.passWordConfirmation) {
       return {
         statusCode: 400,
-        body: new Error('missing param: passWordConfirmation')
+        body: new MissingParamError('passWordConfirmation')
       }
     }
 
