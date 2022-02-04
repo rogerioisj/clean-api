@@ -21,7 +21,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:staged": "jest",
+    "test:staged": "jest --passWithNoTests",
     "precommit": "lint-staged",
     "prepare": "husky install"
   },
