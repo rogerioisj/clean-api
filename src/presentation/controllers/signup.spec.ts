@@ -1,9 +1,27 @@
 import { MissingParamError } from '../errors/missing-param.error'
+import { EmailValidator } from '../protocols/email-validator.protocol'
 import { SignupController } from './signup.controller'
 
+interface SutType {
+  sut: SignupController
+  emailValidatorStub: EmailValidator
+}
+const makeSut = (): SutType => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      return false
+    }
+  }
+
+  const emailValidatorStub = new EmailValidatorStub()
+  return {
+    emailValidatorStub: emailValidatorStub,
+    sut: new SignupController(emailValidatorStub)
+  }
+}
 describe('Signup Controle', () => {
   test('Should return 400 if no name is provided', () => {
-    const sut = new SignupController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         email: 'any_email@test.com',
@@ -17,7 +35,7 @@ describe('Signup Controle', () => {
   })
 
   test('Should return 400 if no email is provided', () => {
-    const sut = new SignupController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'Any Name',
@@ -31,7 +49,7 @@ describe('Signup Controle', () => {
   })
 
   test('Should return 400 if no password is provided', () => {
-    const sut = new SignupController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'Any Name',
@@ -44,7 +62,7 @@ describe('Signup Controle', () => {
   })
 
   test('Should return 400 if no password confirmation is provided', () => {
-    const sut = new SignupController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'Any Name',
@@ -55,5 +73,21 @@ describe('Signup Controle', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
+  })
+
+  test('Should return 400 if invalid email is provided', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'Any Name',
+        email: 'any_email@test.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const isValid = emailValidatorStub.isValid(httpRequest.body.email)
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(isValid).toBe(false)
   })
 })
