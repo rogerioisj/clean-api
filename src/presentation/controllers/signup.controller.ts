@@ -20,5 +20,12 @@ export class SignupController {
         body: new Error('missing param: password')
       }
     }
+
+    if (!httpRequest.body.passWordConfirmation) {
+      return {
+        statusCode: 400,
+        body: new Error('missing param: passWordConfirmation')
+      }
+    }
   }
 }
