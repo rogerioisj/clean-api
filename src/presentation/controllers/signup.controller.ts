@@ -1,5 +1,7 @@
+import { HttpRequest, HttpResponse } from '../protocols/http.protocol'
+
 export class SignupController {
-  handle (httpRequest: any): any {
+  handle (httpRequest: HttpRequest): HttpResponse {
     if (!httpRequest.body.name) {
       return {
         statusCode: 400,
@@ -26,6 +28,11 @@ export class SignupController {
         statusCode: 400,
         body: new Error('missing param: passWordConfirmation')
       }
+    }
+
+    return {
+      statusCode: 200,
+      body: 'ok'
     }
   }
 }
